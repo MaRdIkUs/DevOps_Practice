@@ -29,8 +29,9 @@ upgrade-worker.sh
 ```
 
 > [!NOTE]
->Exaple how to run this scripts:
->```bash
+>Exaple how to run this scripts
+>
+```bash
 sudo ./upgrade-master.sh 1 28
 ```
 >Where:\
