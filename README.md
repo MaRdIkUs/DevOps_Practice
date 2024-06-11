@@ -12,13 +12,16 @@ After creating VM's vagrant automaticly install all neccesary components
 >*kubectl get nodes*
 6. Update cluster to version 1.30 using script files
 >*upgrade-master.sh* for master node
-*upgrade-worker.sh* for worker node
+>*upgrade-worker.sh* for worker node
+
 > [!NOTE]
 >Exaple how to run this scripts:
 >>*sudo ./upgrade-master.sh 1 28*
+
 >Where:
 >1 is Major version
 >28 is Minor version
+
 >[!WARNING]
 >Update sequentially!
 >For exampe you have version 1.27
