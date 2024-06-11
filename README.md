@@ -5,18 +5,21 @@ After creating VM's vagrant automaticly install all neccesary components
 >*init-master.sh*
 2. Join worker nodes
 3. Install the CNI plugin (on master node)
+```bash
 >*kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml*
+```
 4. Whait for pods come *running*
 >*watch kubectl get pods -n kube-system*
 5. Check for nodes are ready
 >*kubectl get nodes*
 6. Update cluster to version 1.30 using script files
->*upgrade-master.sh* for master node\
->*upgrade-worker.sh* for worker node
+>*upgrade-master.sh*    -- for master node\
+>*upgrade-worker.sh*    -- for worker node
 
 > [!NOTE]
 >Exaple how to run this scripts:
 >>*sudo ./upgrade-master.sh 1 28*
+>
 >Where:\
 >1 is Major version\
 >28 is Minor version
