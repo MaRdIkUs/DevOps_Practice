@@ -1,5 +1,5 @@
 # DevOps_Practice
-After creating VM's vagrant automaticly install all neccesary components
+After creating VM's vagrant automaticly install all neccesary components\
 **You shuld do the next steps**
 1. Init the kubernetes cluster
 ```
