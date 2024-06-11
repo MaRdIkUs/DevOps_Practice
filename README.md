@@ -29,14 +29,13 @@ upgrade-worker.sh
 ```
 
 > [!NOTE]
->Exaple how to run this scripts
->
-```bash
-sudo ./upgrade-master.sh 1 28
-```
+>Exaple how to run this scripts\
 >Where:\
 >1 is Major version\
 >28 is Minor version
+```bash
+sudo ./upgrade-master.sh 1 28
+```
 
 >[!WARNING]
 >Update sequentially!\
