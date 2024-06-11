@@ -18,18 +18,20 @@ watch kubectl get pods -n kube-system
 ```bash
 kubectl get nodes
 ```
-6. Update cluster to version 1.30 using script files
+6. Update cluster to version 1.30 using script files\
+for master node
 ```bash
-upgrade-master.sh* - for master node
+upgrade-master.sh
 ```
+for worker node
 ```bash
-upgrade-worker.sh* - for worker node
+upgrade-worker.sh 
 ```
 
 > [!NOTE]
 >Exaple how to run this scripts:
-```bash
-*sudo ./upgrade-master.sh 1 28*
+>```bash
+sudo ./upgrade-master.sh 1 28
 ```
 >Where:\
 >1 is Major version\
