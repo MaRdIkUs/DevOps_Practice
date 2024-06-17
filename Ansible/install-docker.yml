@@ -1,0 +1,70 @@
+- name: Install docker
+  hosts: all
+
+  become: yes
+  tasks:
+  - name: Install nessasary components
+    apt:
+      name: "{{ item }}"
+      state: present
+      force: yes
+    loop:
+      - curl
+      - gnupg2
+      - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+
+  - name: Create keyring directory
+    ansible.builtin.file:
+      path: /etc/apt/keyrings
+      state: directory
+      mode: '0755'
+
+  - name: Download Docker GPG key
+    ansible.builtin.get_url:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      dest: /etc/apt/keyrings/docker.asc
+      mode: '0644'
+
+  - name: Add Docker repository
+    apt_repository:
+      repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
+      state: present
+
+  - name: Apt update and upgrade
+    apt:
+      update_cache: yes
+      force_apt_get: yes
+      upgrade: yes
+
+  - name: Install docker
+    apt:
+      name: "{{ item }}"
+      state: latest
+      force_apt_get: yes
+    loop:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+  - name: Get default config
+    command: "containerd config default"
+    register: default_containerd_config
+
+  - name: Write config to file
+    copy:
+      content: "{{ default_containerd_config.stdout }}"
+      dest: "/etc/containerd/config.toml"
+
+  - name: Editint default config
+    command: "sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml"
+
+  - name: Restart and enable the containerd service
+    command: "{{ item }}"
+    with_items:
+      - systemctl restart containerd
+      - systemctl enable containerd
+      - systemctl daemon-reload
+      - systemctl restart docker

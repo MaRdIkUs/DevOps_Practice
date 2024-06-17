@@ -1,0 +1,2 @@
+tr -d '\r' < /home/vagrant/ansible/upgrade-master.sh > /home/vagrant/ansible/improved-upgrade-master.sh
+tr -d '\r' < /home/vagrant/ansible/upgrade-worker.sh > /home/vagrant/ansible/improved-upgrade-worker.sh

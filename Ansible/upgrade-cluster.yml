@@ -1,0 +1,25 @@
+- name: Upgrade master node
+  hosts: master
+
+  tasks:
+    - name: Transfer the upgrade script
+      copy: 
+        src: /home/vagrant/ansible/improved-upgrade-master.sh 
+        dest: /home/vagrant/upgrade-master.sh 
+        mode: u+rwx,g-rwx,o-rwx
+
+    - name: "Upgrade to version {{ major }}.{{ minor }}"
+      command: "sudo /home/vagrant/upgrade-master.sh {{ major }} {{ minor }}"
+
+- name: Upgrade workers nodes
+  hosts: workers
+
+  tasks:
+    - name: Transfer the upgrade script
+      copy: 
+        src: /home/vagrant/ansible/improved-upgrade-worker.sh 
+        dest: /home/vagrant/upgrade-worker.sh 
+        mode: u+rwx,g-rwx,o-rwx
+
+    - name: "Upgrade to version {{ major }}.{{ minor }}"
+      command: "sudo /home/vagrant/upgrade-worker.sh {{ major }} {{ minor }}"

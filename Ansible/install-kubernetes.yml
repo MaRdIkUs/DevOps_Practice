@@ -1,0 +1,42 @@
+- name: Install kubernetes
+  hosts: all
+
+  become: yes
+  tasks:
+  - name: Add kubernetes GPG key
+    apt_key:
+      url: https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key
+      state: present
+      keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+  - name: Add kubernetes repository
+    apt_repository:
+      repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /"
+      state: present
+
+  - name: Apt update and upgrade
+    apt:
+      update_cache: yes
+      force_apt_get: yes
+      upgrade: yes
+
+  - name: Install kubernetes
+    apt:
+      name: "{{ item }}"
+      state: present
+      force_apt_get: yes
+      update_cache: yes
+      allow_downgrade: yes
+    loop:
+      - kubelet=1.27.0-2.1
+      - kubeadm=1.27.0-2.1
+      - kubectl=1.27.0-2.1
+      
+  - name: Set kubernetes on hold
+    ansible.builtin.dpkg_selections:
+      name: "{{ item }}"
+      selection: hold
+    loop:
+      - kubelet
+      - kubeadm
+      - kubectl

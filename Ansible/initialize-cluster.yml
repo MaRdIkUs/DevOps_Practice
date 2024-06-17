@@ -1,0 +1,32 @@
+- name: Initialize master
+  hosts: master
+  tasks:
+    - name: Initialize Kubernetes master
+      become: yes
+      command: kubeadm --apiserver-advertise-address=172.16.0.1 --pod-network-cidr=172.16.0.0/16 init
+
+    - name: Set up kubectl for the current user Part1
+      shell: "mkdir -p $HOME/.kube"
+      args:
+        executable: /bin/bash
+
+    - name: Set up kubectl for the current user Part2
+      shell: "{{ item }}"
+      loop:
+        - "sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config"
+        - "sudo chown $(id -u):$(id -g) $HOME/.kube/config"
+      args:
+    
+    - name: Get join command
+      command: "kubeadm token create --print-join-command"
+      register: worker_join_command
+
+    - name: Install Calico network plugin
+      command: kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+
+- name: Initialize workers
+  hosts: workers
+  become: yes
+  tasks:
+    - name: Join worker nodes to the cluster
+      command: "{{ hostvars['master']['worker_join_command'].stdout }}"
