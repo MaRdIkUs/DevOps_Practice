@@ -32,23 +32,23 @@ Vagrant.configure("2") do |config|
   config.vm.define "ansible" do |ansible|
     ansible.vm.hostname = "ansible"
     ansible.vm.box = "ubuntu/jammy64"
-    ansible.vm.network "private_network", 
-      ip: "172.16.1.1", 
-      netmask: "255.255.0.0", 
-      virtualbox__intnet: "cluster1"
-      ansible.vm.provision "shell", path: ".\\init-scripts\\ansible\\copy-ssh-keys.sh"
-      ansible.vm.provision "file", source: ".\\Ansible", destination: "/home/vagrant/ansible"
-    ansible.vm.provision "shell", path: ".\\init-scripts\\ansible\\prepare-files.sh"
-    ansible.vm.provision "shell", path: ".\\init-scripts\\ansible\\install-ansible.sh"
-    ansible.vm.provision "file", source: ".\\init-scripts\\ansible\\init-cluster.sh", destination: "/home/vagrant/init-cluster.sh"
-    ansible.vm.provision "shell", run: "always", inline: <<-SHELL
-        chmod +x /home/vagrant/init-cluster.sh
-      SHELL
-    ansible.vm.synced_folder ".\\.vagrant\\machines", "/machines"
     ansible.vm.provider "virtualbox" do |machine|
       machine.memory = "2048"
       machine.cpus = "2"
     end
+    ansible.vm.network "private_network", 
+      ip: "172.16.1.1", 
+      netmask: "255.255.0.0", 
+      virtualbox__intnet: "cluster1"
+    ansible.vm.synced_folder ".\\.vagrant\\machines", "/machines"
+    ansible.vm.provision "shell", path: ".\\init-scripts\\ansible\\copy-ssh-keys.sh"
+    ansible.vm.provision "file", source: ".\\Ansible", destination: "/home/vagrant/ansible"
+    ansible.vm.provision "shell", path: ".\\init-scripts\\ansible\\prepare-files.sh"
+    ansible.vm.provision "shell", path: ".\\init-scripts\\ansible\\install-ansible.sh"
+    ansible.vm.provision "shell", run: "always", inline: <<-SHELL
+        mv /home/vagrant/ansible/init-cluster.sh /home/vagrant/init-cluster.sh
+        chmod +x /home/vagrant/init-cluster.sh
+      SHELL
   end
   #product_uuid should be unique for every machine
 end
