@@ -1,5 +1,5 @@
 # DevOps_Practice
-For start\
+For start
 1. Create VM's (from project directory)
 ```
 vagrant up
